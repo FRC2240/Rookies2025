@@ -11,13 +11,19 @@ void Robot::AutonomousInit() {}
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {}
-void Robot::TeleopPeriodic() {}
+
+void Robot::TeleopPeriodic() {
+  m_intake.run(m_stick.GetAButtonPressed());
+}
 
 void Robot::DisabledInit() {}
 void Robot::DisabledPeriodic() {}
 
 void Robot::TestInit() {}
-void Robot::TestPeriodic() {}
+
+void Robot::TestPeriodic() {
+  m_intake.Test();
+}
 
 void Robot::SimulationInit() {}
 void Robot::SimulationPeriodic() {}
