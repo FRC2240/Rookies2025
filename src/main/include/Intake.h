@@ -1,5 +1,9 @@
 #include "rev/ColorSensorV3.h"
 #include <rev/CANSparkMax.h>
+#include <frc/Timer.h>
+#include "units/time.h"
+#include "frc/DriverStation.h"
+
 
 class Intake {
   public:
@@ -22,9 +26,9 @@ class Intake {
 
     void Test();
     BALL_COLOR getBallColor();
+    BALL_COLOR correctColor = kNONE;
     
-    void run(bool buttonA);
-
+    void Periodic(bool buttonA);
 
   private:
 
@@ -50,6 +54,7 @@ class Intake {
     const double BLUEBALL_BLUE_MIN  = BLUEBALL_BLUE - TOLERANCE;
     const double BLUEBALL_BLUE_MAX  = BLUEBALL_BLUE + TOLERANCE;
 
+    frc::Timer m_timer;
 
     rev::ColorSensorV3 m_colorSensor{frc::I2C::Port::kOnboard};
 
@@ -57,4 +62,7 @@ class Intake {
     rev::CANSparkMax m_hinge{3, rev::CANSparkMax::MotorType::kBrushless};
     rev::SparkMaxPIDController m_pid = m_hinge.GetPIDController();
 
+    std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
+
+    
 };
