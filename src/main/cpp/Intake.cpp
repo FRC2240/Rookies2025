@@ -3,31 +3,44 @@
 #include <iostream>
 
 
-void Intake::Periodic(bool buttonA) {
-    if (correctColor == kNONE) {
-        std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
+void Intake::Init() {
+    double sensorColors[3] = {0,0,0};
+    frc::SmartDashboard::PutString("Intake State", "Idle");
+    frc::SmartDashboard::PutNumberArray("Color: Sensor Color", sensorColors);
+    frc::SmartDashboard::PutNumber("P Gain", m_pidCoeff.kP);
+    frc::SmartDashboard::PutNumber("Hinge Pos", 0);
+    m_pid.SetP(m_pidCoeff.kP);
+}
 
-        if (alliance == frc::DriverStation::Alliance::kRed) {
-            correctColor = kRED;
-        }
-        if (alliance == frc::DriverStation::Alliance::kBlue) {
-            correctColor = kBLUE;
-        }
+void Intake::Periodic(bool buttonA) {
+    frc::SmartDashboard::PutNumber("Hinge Pos", m_encoder.GetPosition());
+    m_pidCoeff.kP = frc::SmartDashboard::GetNumber("P Gain", m_pidCoeff.kP);
+    m_pid.SetP(m_pidCoeff.kP);
+
+
+    std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
+
+    if (alliance == frc::DriverStation::Alliance::kRed) {
+        correctColor = kRED;
+    }
+    if (alliance == frc::DriverStation::Alliance::kBlue) {
+        correctColor = kBLUE;
     }
 
     BALL_COLOR currentColor = getBallColor();
     switch (m_state) {
     case kIDLE:
-        std::cout << "Idle" << std::endl;
+        frc::SmartDashboard::PutString("Intake State", "Idle");
         // Code for IDLE state
         if (buttonA) {
             m_state = kACTIVE;
         }
         m_roller.Set(0.0);
+        m_pid.SetReference(0.0, rev::CANSparkMax::ControlType::kPosition);
         
         break;
     case kACTIVE:
-        std::cout << "Active" << std::endl;
+        frc::SmartDashboard::PutString("Intake State", "Active");
 
         // Code for ACTIVE state
         if (buttonA) {
@@ -47,19 +60,18 @@ void Intake::Periodic(bool buttonA) {
             break;
         }
         m_roller.Set(0.25);    
+        m_pid.SetReference(80.5, rev::CANSparkMax::ControlType::kPosition);
         break;
     case kINTAKE:
-        std::cout << "Intaking" << std::endl;
-
-        // Code for INTAKE state
-        m_hinge.Set(0.25);
+        frc::SmartDashboard::PutString("Intake State", "Intake");
+        
         if (m_timer.Get() > 1_s) {
             m_hinge.Set(0);
             m_state = kIDLE;
         }
         break;
     case kEJECT:
-        std::cout << "Ejecting" << std::endl;
+        frc::SmartDashboard::PutString("Intake State", "Eject");
         // Code for EJECT state
         m_roller.Set(-0.25);
 
@@ -87,14 +99,17 @@ void Intake::Test() {
 }
 
 Intake::BALL_COLOR Intake::getBallColor() {
-    // auto color = m_colorSensor.GetColor();
+    auto color = m_colorSensor.GetColor();
+    /*
     frc::Color color = {
         frc::SmartDashboard::GetNumber("red", 0),
         frc::SmartDashboard::GetNumber("green", 0),
         frc::SmartDashboard::GetNumber("blue", 0)
     };
+    */
     
-    std::cout << "(r: " << color.red << ", g: " << color.green << ", b: " << color.blue << ")" << std::endl;
+    double sensorColors[3] = {color.red, color.green, color.blue};
+    frc::SmartDashboard::PutNumberArray("Sensor Color", sensorColors);
 
     if (((color.red > REDBALL_RED_MIN) && (color.red < REDBALL_RED_MAX)) &&
         ((color.green > REDBALL_GREEN_MIN) && (color.green < REDBALL_GREEN_MAX)) &&
