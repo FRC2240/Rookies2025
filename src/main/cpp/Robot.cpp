@@ -9,6 +9,8 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutNumber("red", 0);
   frc::SmartDashboard::PutNumber("green", 0);
   frc::SmartDashboard::PutNumber("blue", 0.5);
+
+  m_intake.Init();
 }
 void Robot::RobotPeriodic() {}
 

@@ -28,6 +28,7 @@ class Intake {
     BALL_COLOR getBallColor();
     BALL_COLOR correctColor = kNONE;
     
+    void Init();
     void Periodic(bool buttonA);
 
   private:
@@ -60,9 +61,24 @@ class Intake {
 
     rev::CANSparkMax m_roller{2, rev::CANSparkMax::MotorType::kBrushless};
     rev::CANSparkMax m_hinge{3, rev::CANSparkMax::MotorType::kBrushless};
+    rev::SparkMaxRelativeEncoder m_encoder = m_hinge.GetEncoder();
     rev::SparkMaxPIDController m_pid = m_hinge.GetPIDController();
 
     std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
 
+    struct pidCoeff {
+      double kP;
+      double kI;
+      double kD;
+      double kIz;
+      double kFF;
+      double kMinOutput;
+      double kMaxOutput;
+    };
+
+    void setP(double pGain) { m_pidCoeff.kP = pGain; }
+
+    pidCoeff m_pidCoeff{0.1, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0};
     
 };
+
