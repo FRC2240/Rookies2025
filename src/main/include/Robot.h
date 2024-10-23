@@ -4,7 +4,9 @@
 
 #pragma once
 
+#include "Intake.h"
 #include <frc/TimedRobot.h>
+#include <frc/XboxController.h>
 
 class Robot : public frc::TimedRobot {
  public:
@@ -25,4 +27,9 @@ class Robot : public frc::TimedRobot {
 
   void SimulationInit() override;
   void SimulationPeriodic() override;
+
+  private:
+    Intake m_intake;
+    frc::XboxController m_stick{0};
+
 };

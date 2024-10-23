@@ -1,23 +1,32 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
+#include "frc/smartdashboard/SmartDashboard.h"
 #include "Robot.h"
 
-void Robot::RobotInit() {}
+void Robot::RobotInit() {
+  frc::SmartDashboard::PutNumber("red", 0);
+  frc::SmartDashboard::PutNumber("green", 0);
+  frc::SmartDashboard::PutNumber("blue", 0);
+}
 void Robot::RobotPeriodic() {}
 
 void Robot::AutonomousInit() {}
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {}
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+  m_intake.run(m_stick.GetAButtonPressed());
+}
 
 void Robot::DisabledInit() {}
 void Robot::DisabledPeriodic() {}
 
 void Robot::TestInit() {}
-void Robot::TestPeriodic() {}
+
+void Robot::TestPeriodic() {
+  m_intake.Test();
+}
 
 void Robot::SimulationInit() {}
 void Robot::SimulationPeriodic() {}
