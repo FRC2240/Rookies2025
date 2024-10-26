@@ -3,21 +3,30 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "Robot.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 
-void Robot::RobotInit() {}
+void Robot::RobotInit() {
+  frc::SmartDashboard::PutNumber("red", 0);
+  frc::SmartDashboard::PutNumber("green", 0);
+  frc::SmartDashboard::PutNumber("blue", 0);
+}
 void Robot::RobotPeriodic() {}
 
 void Robot::AutonomousInit() {}
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {}
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+  m_intake.Run(m_stick.GetAButtonPressed());
+}
 
 void Robot::DisabledInit() {}
 void Robot::DisabledPeriodic() {}
 
 void Robot::TestInit() {}
-void Robot::TestPeriodic() {}
+void Robot::TestPeriodic() {
+  m_intake.Test();
+}
 
 void Robot::SimulationInit() {}
 void Robot::SimulationPeriodic() {}

@@ -1,0 +1,30 @@
+"A" Button :
+        Deploy Hinge
+        Start Roller
+
+    Toggle :
+        Retract Intake
+        Stop Roller
+
+When "Correct" Color Ball:
+    Run Roller for 1 second
+    then retract roller and stop it
+
+When "Wrong" Color Ball:
+    Run Roller Backwards for 1 second
+    Set roller back to normal
+    Try to intake again
+
+Shooting:
+    When Left trigger Pressed && if have "correct" ball:
+        Shoot when distance to target is between 6.0 and 7.0 feet
+        rpm is 1200
+
+Red
+    R = 0.56
+    G = 0.33
+    B = 0.12
+Blue
+    R = 0.12
+    G = 0.36
+    B = 0.53
