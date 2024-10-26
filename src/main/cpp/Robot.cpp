@@ -10,7 +10,8 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutNumber("green", 0);
   frc::SmartDashboard::PutNumber("blue", 0.5);
 
-  m_intake.Init();
+  //m_intake.Init();
+  m_shooter.Init();
 }
 void Robot::RobotPeriodic() {}
 
@@ -20,7 +21,9 @@ void Robot::AutonomousPeriodic() {}
 void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
-  m_intake.Periodic(m_stick.GetAButtonPressed());
+  //m_intake.Periodic(m_stick.GetAButtonPressed());
+  auto distance = m_vision.getDistanceToTarget();
+  m_shooter.Shoot(distance);
 }
 
 void Robot::DisabledInit() {}
