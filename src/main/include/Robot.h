@@ -7,6 +7,8 @@
 #include <frc/TimedRobot.h>
 #include <frc/XboxController.h>
 #include "Intake.h"
+#include "Vision.h"
+#include "Shooter.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -29,7 +31,9 @@ class Robot : public frc::TimedRobot {
   void SimulationPeriodic() override;
 
   private:
-    Intake m_intake;
+    //Intake m_intake;
     frc::XboxController m_stick{0};
+    Vision m_vision;
+    Shooter m_shooter;
 
 };

@@ -29,6 +29,7 @@ class Intake {
     BALL_COLOR correctColor = kNONE;
     
     void Init();
+
     void Periodic(bool buttonA);
 
   private:
